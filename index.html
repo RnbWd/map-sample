@@ -111,10 +111,11 @@ function login () {
 
 
 function addMarker(location) {
+  var title = 'title' + count
   var marker = new google.maps.Marker({
     position: location,
     map: map,
-    title: 'title' + count
+    title: title
   });
 
   markers.push(marker);
@@ -122,42 +123,47 @@ function addMarker(location) {
   map.setCenter(marker.position);
 
    var options = {
-    content: marker.title
+    content: title
   };
 
   var infowindow = new google.maps.InfoWindow(options);
 
-  //infowindow.open(map,marker);
-
   google.maps.event.addListener(marker, 'click', function() {
     infowindow.open(map,marker);
-    document.getElementById(marker.title).style.background = "yellow";
+    document.getElementById(title).style.background = "yellow";
   });
 
   google.maps.event.addListener(infowindow, 'closeclick', function() {
-    document.getElementById(marker.title).style.background = "transparent";
+    document.getElementById(title).style.background = "transparent";
   });
 
 
   var list = document.getElementById('list');
   var item = document.createElement('li');
   var span = document.createElement('span');
-  $(list).append("<li id = "+marker.title+"><span>"+marker.title + " </span><input class='edit' type='button' value='edit' /> <br> Lattitude: " + marker.position.d + "<input class='del' type='button' value='delete' />")
-  //console.log(list.children);
-  var elem = $('#'+marker.title);
-var chari = marker.title.charAt(marker.title.length-1);
-  //console.log(elem);
+  $(list).append("<li id = "+title+"><span>"+title + " </span><input class='edit' type='button' value='edit' /> <br> Lattitude: " + marker.position.d + "<input class='del' type='button' value='delete' />")
+
+  var elem = $('#'+title);
+
   elem.on('click', '.del', function(e) {
-    //$('#'+marker.title).remove();
+    infowindow.close();
     $(this).parent().remove();
-    markers[chari].setVisible(false);
+    marker.setVisible(false);
   });
 
   var input = $('#'+marker.title +' span');
    elem.on('click', '.edit', function(e) {
-     input.html("<input class='edit_box' type='text' placeholder='"+marker.title+"' />");
+     infowindow.open(map,marker);
+     input.html("<input class='edit_box' type='text' value='"+marker.title+"' />");
      var temp = $('.edit_box');
-     console.log(temp);
+     temp.on('keypress', function(e) {
+      if (e.keyCode == 13) {
+        
+        $(this).parents('span').html(this.value);
+        marker.setTitle(this.value);
+        infowindow.setContent(this.value);
+      }
+     });
    });
 
    //elem.on('submit', '.edit_box', function(e) {
