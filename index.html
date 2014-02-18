@@ -22,7 +22,22 @@
     See: https://developers.google.com/maps/documentation/javascript/tutorial#Loading_the_Maps_API
     -->
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true"></script>
-
+    <script src="js/zepto.min.js"></script>
+    
+  </head>
+  <body>
+    <div id="login">
+      <input id="name_input" type="text" placeholder="username" />
+      <input onclick="login();" type="button" value="Login">
+    </div>
+    <div id="info">Attempting Geolocation... Please give site permission :)</div>
+    <div id="click_info">Click map once to add marker, click on marker once to highlight information</div>
+    <div id="map-canvas"></div>
+    <div id="data">
+      
+      <p id="username">Anonymous Username</p>
+      <ul id="list"></ul>
+    </div>
     <script>
 // Note: This example requires that you consent to location sharing when
 // prompted by your browser. If you see a blank space instead of the map, this
@@ -56,10 +71,12 @@ function setAllMap(map) {
 
 function clearMarkers() {
   setAllMap(null);
+  console.log(markers);
 }
 
 function showMarkers() {
   setAllMap(map);
+  console.log(markers);
 }
 
 var count= 0;
@@ -125,8 +142,8 @@ function addMarker(location) {
   var list = document.getElementById('list');
   var item = document.createElement('li');
   var span = document.createElement('span');
-  var content = document.createTextNode(marker.title + "  ");
-  span.appendChild(content);
+  //var content = document.createTextNode(marker.title + "  ");
+  /*$(span).html(marker.title + " ");
   item.id = marker.title;
   item.appendChild(span);
   var del = document.createElement('button');
@@ -134,22 +151,42 @@ function addMarker(location) {
   edit.appendChild(document.createTextNode("Edit"));
   del.appendChild(document.createTextNode("Delete"));
   var coords = document.createTextNode("  Lattitude: " + marker.position.d + ' Longitude: ' + marker.position.e);
-  item.appendChild(edit);
-  item.appendChild(coords);
+  item.appendChild(edit)
+  item.appendChild(coords)
   item.appendChild(del);
-  list.appendChild(item);
-  del.onclick = function() {
-    //markers[marker.title.charAt(marker.title.length-1)]=null;
-    console.log(markers);
-    del.innerHTML = "doesn't work yet";
-  }
-  edit.onclick = function() {
-    span.innerHTML="<input placeholder='" + marker.title+"'/>";
-    edit.innerHTML = "doesn't work yet";
-  }
+  //list.appendChild(item);*/
+  $(list).append("<li id = "+marker.title+"><span>"+marker.title + " </span><input class='edit' type='button' value='edit' /> <br> Lattitude: " + marker.position.d + "<input class='del' type='button' value='delete' />")
+  //console.log(list.children);
+  var elem = $('#'+marker.title);
+var chari = marker.title.charAt(marker.title.length-1);
+  console.log(elem);
+  elem.on('click', '.del', function(e) {
+    $('#'+marker.title).remove();
+    //clearMarkers();
+    console.log(markers[chari]);
+    markers[chari].setVisible(false);
+    //showMarkers();
+  });
+
+  var input = $('#'+marker.title +' span');
+   elem.on('click', '.edit', function(e) {
+     input.html("<input class='edit_box' type='text' placeholder='"+marker.title+"' />")
+     $('.edit_box').on('keydown', function(e) {
+      if(e.keycode == 13) {
+        console.log('hello');
+      }
+     });   
+   });
+
+   //elem.on('submit', '.edit_box', function(e) {
+    //markers.[chari].setTitle($('.edit_box').value);
+  //  input.html(this.value)
+  // });
   count++;
 
 }
+
+
 
 function handleNoGeolocation(errorFlag) {
   if (errorFlag) {
@@ -163,24 +200,6 @@ function handleNoGeolocation(errorFlag) {
 }
 
 google.maps.event.addDomListener(window, 'load', initialize);
-
-
-    </script>
-  </head>
-  <body>
-    <div id="login">
-      <input id="name_input" type="text" placeholder="username" />
-      <input onclick="login();" type="button" value="Login">
-    </div>
-    <div id="info">Attempting Geolocation... Please give site permission :)</div>
-    <div id="click_info">Click map once to add marker, click on marker once to highlight information</div>
-    <div id="map-canvas"></div>
-    <div id="data">
-      
-      <p id="username">Anonymous Username</p>
-      <ul id="list"></ul>
-    </div>
-    <script>
 
     </script>
   </body>
