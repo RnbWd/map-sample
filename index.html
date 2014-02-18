@@ -142,40 +142,22 @@ function addMarker(location) {
   var list = document.getElementById('list');
   var item = document.createElement('li');
   var span = document.createElement('span');
-  //var content = document.createTextNode(marker.title + "  ");
-  /*$(span).html(marker.title + " ");
-  item.id = marker.title;
-  item.appendChild(span);
-  var del = document.createElement('button');
-  var edit = document.createElement('button');
-  edit.appendChild(document.createTextNode("Edit"));
-  del.appendChild(document.createTextNode("Delete"));
-  var coords = document.createTextNode("  Lattitude: " + marker.position.d + ' Longitude: ' + marker.position.e);
-  item.appendChild(edit)
-  item.appendChild(coords)
-  item.appendChild(del);
-  //list.appendChild(item);*/
   $(list).append("<li id = "+marker.title+"><span>"+marker.title + " </span><input class='edit' type='button' value='edit' /> <br> Lattitude: " + marker.position.d + "<input class='del' type='button' value='delete' />")
   //console.log(list.children);
   var elem = $('#'+marker.title);
 var chari = marker.title.charAt(marker.title.length-1);
-  console.log(elem);
+  //console.log(elem);
   elem.on('click', '.del', function(e) {
-    $('#'+marker.title).remove();
-    //clearMarkers();
-    console.log(markers[chari]);
+    //$('#'+marker.title).remove();
+    $(this).parent().remove();
     markers[chari].setVisible(false);
-    //showMarkers();
   });
 
   var input = $('#'+marker.title +' span');
    elem.on('click', '.edit', function(e) {
-     input.html("<input class='edit_box' type='text' placeholder='"+marker.title+"' />")
-     $('.edit_box').on('keydown', function(e) {
-      if(e.keycode == 13) {
-        console.log('hello');
-      }
-     });   
+     input.html("<input class='edit_box' type='text' placeholder='"+marker.title+"' />");
+     var temp = $('.edit_box');
+     console.log(temp);
    });
 
    //elem.on('submit', '.edit_box', function(e) {
